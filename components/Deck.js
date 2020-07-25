@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
-import { darkGreen, lightGreen } from '../utils/colors'
+import { darkGreen, lightGreen } from '../utils/app-colors'
 
 export class Deck extends Component {    
     render() {
@@ -16,6 +16,7 @@ export class Deck extends Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

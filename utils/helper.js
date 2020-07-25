@@ -1,15 +1,15 @@
 import { AsyncStorage } from 'react-native'
 import { decks } from './_DATA'
 
-export const DECKS_STORAGE_KEY = 'MobileFlashCards:decks';
+export const MOBILE_FLASHCARDS_STORAGE = 'MOBILE_FLASHCARDS_STORAGE';
 
 export function getDecks() {
-    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+    return AsyncStorage.getItem(MOBILE_FLASHCARDS_STORAGE)
         .then(result => {
             if (result !== null) {
                 return JSON.parse(result)
             } else {
-                AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(decks))
+                AsyncStorage.setItem(MOBILE_FLASHCARDS_STORAGE, JSON.stringify(decks))
                 return decks;
             }
         })
@@ -20,9 +20,9 @@ export function getDeck(title) {
         .then((decks) => decks[title]);
 }
 
-export function saveDeckTitle(title) {
+export function saveDeck(title) {
     const deck = { title, questions: []}
-    return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
+    return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_STORAGE, JSON.stringify({
         [title]: deck
     }))
 }
@@ -31,6 +31,6 @@ export function addCardToDeck(title, card) {
     return getDecks()
         .then((decks) => {
             decks[title.title].questions.push(card)
-            AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(decks))
+            AsyncStorage.mergeItem(MOBILE_FLASHCARDS_STORAGE, JSON.stringify(decks))
         })
 }

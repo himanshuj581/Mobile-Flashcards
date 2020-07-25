@@ -1,36 +1,37 @@
 import React, { Component } from 'react'
 import { SafeAreaView, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { getAllDecks } from '../actions'
-import { getDecks } from '../utils/api'
-import { white, darkGreen } from '../utils/colors'
+import { getAllDecks } from '../redux-store/actions'
+import { getDecks } from '../utils/helper'
+import { white, darkGreen } from '../utils/app-colors'
 import Deck from './Deck'
 import { AppLoading } from 'expo'
 import { AntDesign } from '@expo/vector-icons'
 
-export class Dashboard extends Component {
+export class Home extends Component {
   static navigationOptions = {
     title: 'Mobile Flashcards'
   }
 
   state = {
-    ready: false
+    isAppStart: false
   }
 
   componentDidMount() {
     const { dispatch } = this.props
     getDecks()
       .then(decks => dispatch(getAllDecks(decks)))
-      .then(() => this.setState(() => ({ ready: true })))
+      .then(() => this.setState(() => ({ isAppStart: true })))      
   }
 
   navigateToDeckDetail = (deck) => {
     this.props.navigation.navigate('DeckDetails', { deck })
   }
+
   render() {
     const { decks } = this.props
-    const { ready } = this.state
-    if (ready === false) {
+    const { isAppStart } = this.state
+    if (isAppStart === false) {
       return <AppLoading />
     }
     return (
@@ -41,7 +42,7 @@ export class Dashboard extends Component {
           keyExtractor={(item, index) => `list-item-${index}`}
         />
         <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-          <TouchableOpacity style={styles.primaryBtn} onPress={() => this.props.navigation.navigate('AddDeck')}>
+          <TouchableOpacity style={styles.addButton} onPress={() => this.props.navigation.navigate('NewDeck')}>
           <AntDesign name="pluscircleo" size={70} color={white} />
           </TouchableOpacity>
         </View>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: white
   },
-  primaryBtn: {
+  addButton: {
     backgroundColor: darkGreen,
     borderRadius: 50,
     marginBottom: 10,
@@ -70,4 +71,4 @@ function mapStateToProps(decks) {
     decks
   }
 }
-export default connect(mapStateToProps)(Dashboard)
+export default connect(mapStateToProps)(Home)

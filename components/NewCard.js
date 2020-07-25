@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Dimensions } from 'react-native'
-import { addNewCard } from '../actions'
-import { addCardToDeck } from '../utils/api'
+import { addNewCard } from '../redux-store/actions'
+import { addCardToDeck } from '../utils/helper'
 import { connect } from 'react-redux'
-import { grey, white, darkGreen, red } from '../utils/colors'
+import { grey, white, red } from '../utils/app-colors'
+import SolidButton from './SolidButton'
+import CustomInput from './CustomInput'
 
-export class AddCard extends Component {
+
+export class NewCard extends Component {
     static navigationOptions = {
         title: 'Add Card'
     }
@@ -40,28 +43,21 @@ export class AddCard extends Component {
                 <View style={styles.container}>
                     <Text style={styles.heading}>Add a New Card</Text>
                     <KeyboardAvoidingView behavior='padding'>
-                        <TextInput
-                            onChangeText={this.handleAddQuestion}
-                            placeholder={'Type your question here...'}
-                            style={styles.input}>
-                        </TextInput>
+                        
+                        <CustomInput action={this.handleAddQuestion} placeholder='Type your question here...'/>
                         {
                             this.state.question.length === 0 &&
                             <Text style={styles.alertText}>Question is requirred!!</Text>
                         }
-                        <TextInput
-                            onChangeText={this.handleAddAnswer}
-                            placeholder={'Is it true or false ?'}
-                            style={styles.input}>
-                        </TextInput>
+                        <CustomInput action={this.handleAddAnswer} placeholder='Is it true or false ?'/>
                         {
                             this.state.answer.length === 0 &&
                             <Text style={styles.alertText}>Answere is requirred!!</Text>
                         }
                     </KeyboardAvoidingView>
-                    <TouchableOpacity style={styles.AddCardButton} onPress={this.onPressButton} disabled={this.state.question === '' || this.state.answer === '' ? true : false}>
-                        <Text style={styles.AddCardButtonText}>Add Card</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonView}>
+                    <SolidButton text={{buttonText: 'Add Card'}} action= {this.onPressButton} disabled={this.state.question === '' || this.state.answer === '' ? true : false}/> 
+                    </View>
                 </View>
         )
     }
@@ -85,22 +81,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontWeight: 'bold',
     },
-    AddCardButton: {
-        backgroundColor: darkGreen,
-        padding: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        borderRadius: 40,
+    buttonView: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        margin: 20
-    },
-    AddCardButtonText: {
-        color: white,
-        textAlign: 'center',
-        fontSize: 21
     },
     input: {
         padding: 20,
@@ -128,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
     createNewCard: (deckId, question, answer) =>
         dispatch(addNewCard(deckId, question, answer))
 })
-export default connect(null, mapDispatchToProps)(AddCard)
+export default connect(null, mapDispatchToProps)(NewCard)

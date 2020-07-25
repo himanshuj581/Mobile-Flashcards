@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import {  white, darkGreen, lightGreen, green, red, grey} from '../utils/colors'
+import {  white, darkGreen, lightGreen, green, red, grey} from '../utils/app-colors'
+import SolidButton from './SolidButton'
+import TranslucentButton from './TranslucentButton'
 
 export class Quiz extends Component {
     static navigationOptions = {
@@ -53,7 +55,7 @@ export class Quiz extends Component {
                 <View style={styles.container}>
                     <View style={styles.section}>
                         <Text style={styles.heading}>There are no cards in this Deck.</Text>
-                        <TouchableOpacity style={{ marginTop: 40, backgroundColor: darkGreen, padding: 20, borderRadius: 40 }} onPress={() => this.props.navigation.navigate('AddCard', { deck })}>
+                        <TouchableOpacity style={{ marginTop: 40, backgroundColor: darkGreen, padding: 20, borderRadius: 40 }} onPress={() => this.props.navigation.navigate('NewCard', { deck })}>
                             <Text style={{ textAlign: 'center', fontSize: 18, color: white, fontWeight: 'bold' }}>Add Card to deck</Text>
                         </TouchableOpacity>
                     </View>
@@ -72,12 +74,8 @@ export class Quiz extends Component {
                         <Text style={{ textAlign: 'center', fontSize: 20,padding: 30, marginBottom: 10,marginTop: 20, color: white, fontWeight: 'bold', backgroundColor: darkGreen, borderRadius: 60, alignSelf: 'center' }}>{percent}%</Text>
                     </View>
                     <View>
-                        <TouchableOpacity style={styles.ResetButton} onPress={() => this.resetQuiz(this.state)}>
-                            <Text style={styles.ResetButtonText}>Reset quiz</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={ styles.BacktoDeckButton } onPress={() => this.props.navigation.goBack()}>
-                            <Text style={[styles.ResetButtonText, { color: darkGreen }]}>Go back to deck</Text>
-                        </TouchableOpacity>
+                        <SolidButton  text={{buttonText: 'Reset quiz'}} action= {() => this.resetQuiz(this.state)} disabled={false}/>
+                        <TranslucentButton text={{buttonText: 'Go back to deck'}} action={() => this.props.navigation.goBack()} />
                     </View>
                 </View>
             )
@@ -115,10 +113,10 @@ export class Quiz extends Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.correctButton} onPress={() => this.handleAnswer(question, 'true')}>
-                        <Text style={styles.btnText}>Correct</Text>
+                        <Text style={styles.buttonText}>Correct</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.wrongButton} onPress={() => this.handleAnswer(question, 'false')}>
-                        <Text style={styles.secondaryText}>Wrong</Text>
+                        <Text style={styles.buttonText}>Wrong</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -183,38 +181,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         flex: 1,
     },
-    ResetButton: {
-        padding: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        borderRadius: 40,
-        alignSelf: 'stretch',
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: darkGreen,
-    },
-    BacktoDeckButton: {
-        padding: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        borderRadius: 40,
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: white,
-        borderWidth: 3,
-        borderColor: darkGreen,
-    },
-    btnText: {
-        color: white,
-        textAlign: 'center',
-        fontSize: 21
-    },
-    ResetButtonText: {
-        color: white,
-        textAlign: 'center',
-        fontSize: 21
-    },
-    secondaryText: {
+    buttonText: {
         color: white,
         textAlign: 'center',
         fontSize: 21

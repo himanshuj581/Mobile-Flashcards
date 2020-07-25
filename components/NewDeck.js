@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Dimensions } from 'react-native'
-import { grey, white, darkGreen } from '../utils/colors'
-import { addNewDeck } from '../actions'
-import { saveDeckTitle } from '../utils/api'
+import { grey, white, darkGreen } from '../utils/app-colors'
+import { addNewDeck } from '../redux-store/actions'
+import { saveDeck } from '../utils/helper'
 import { connect } from 'react-redux'
+import CustomInput from './CustomInput'
 
-export class AddDeck extends Component {
+export class NewDeck extends Component {
     static navigationOptions = {
         title: 'New Deck'
     }
@@ -27,21 +28,17 @@ export class AddDeck extends Component {
     onPressButton = () => {
         const { deckTitle } = this.state
         this.props.createNewDeck(deckTitle)
-        saveDeckTitle(deckTitle)
+        saveDeck(deckTitle)
         this.setState({
             deckTitle: ''
         })
-        this.props.navigation.navigate('DeckDetails', { deck: deckTitle })
+        this.props.navigation.navigate('Home')
     }
     render() {
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <Text style={styles.heading}>New deck</Text>
-                <TextInput
-                    onChangeText={this.handleAddTitle}
-                    placeholder={'Name of the new deck'}
-                    style={styles.input}>
-                </TextInput>
+                <CustomInput action={this.handleAddTitle} placeholder='Name of the new deck'/>
                 {
                     !(this.state.valid)  &&
                     <Text style={{fontWeight:'bold'}}>The deck must have a title</Text>
@@ -100,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
     createNewDeck: (title) =>
         dispatch(addNewDeck(title))
 })
-export default connect( null, mapDispatchToProps)(AddDeck)
+export default connect( null, mapDispatchToProps)(NewDeck)
